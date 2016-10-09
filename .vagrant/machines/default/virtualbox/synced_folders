@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/myblog":{"type":null,"mount_options":[],"guestpath":"/home/vagrant/myblog","hostpath":"E:/PHPWorkSpace/MyBlog","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"E:/PHPWorkSpace/MyBlog","disabled":false,"__vagrantfile":true}}}
