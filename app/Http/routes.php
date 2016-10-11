@@ -16,7 +16,8 @@ Route::get('/welcome', function () {
 });
 
 Route::group(['prefix'=>'article'],function(){
-	Route::any('upload', 'ArticleController@add');
+	Route::any('upload', 'ArticleController@upload');
+	Route::any('addComment', 'ArticleController@addComment');
 	Route::any('query', 'ArticleController@queryById')->middleware(['anony']);
 	Route::any('queryByClassify', 'HomeController@index')->middleware(['anony']);
 	Route::any('alter', 'ArticleController@alter');

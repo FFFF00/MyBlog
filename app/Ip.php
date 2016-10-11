@@ -20,8 +20,8 @@ class Ip extends Model{
         return $this->belongsToMany('App\Article');
     }  
     
-    public function anonyuser(){
-        return $this->hasOne('App\Anonyuser');
+    public function user(){
+        return $this->hasOne('App\User');
     }   
 }
 ?>

@@ -15,23 +15,27 @@ use App\Article;
 use App\Category;
 use App\Anonyuser;
 use App\Tag;
+use App\User;
 use App\Ip;
 
 class CreateAnonyuserIfUnauthorized
 {    
     public function handle($request, Closure $next)
-    {
+    {	
         if (!Auth::check()) {
-            if(!empty($_COOKIE['anony_remember_token'])){
-				$cookie = $_COOKIE['anony_remember_token'];				
-				$user = Anonyuser::where('remember_token', $cookie)->first();
-				if(!$user){
-					$user = $this->_anonyuserByIp();
+        	if(!$request->session()->get('anony_user')){
+	        	//remember_token不存在，直接创建
+	            if(!array_key_exists('anony_remember_token', $_COOKIE)){
+	            	$user = $this->_anonyuserByIp($request);
+				}else{
+					$cookie = $_COOKIE['anony_remember_token'];				
+					$user = User::where('remember_token', $cookie)->first();
+					if(!$user){
+						$user = $this->_anonyuserByIp($request);
+					}
 				}
-			}else{
-				$user = $this->_anonyuserByIp();
-			}
-			$request->session()->put($_COOKIE['anony_remember_token'],$user);
+				$request->session()->put('anony_user', $user);
+        	}			
         }     
         		
         return $next($request);
@@ -50,7 +54,7 @@ class CreateAnonyuserIfUnauthorized
 	    return $ip;
 	} 
 	
-	private function _anonyuserByIp(){
+	private function _anonyuserByIp(Request $request){
 		$realip = $this->_realip();
 		$ip = Ip::where('ip', $realip)->first();
 		
@@ -64,22 +68,25 @@ class CreateAnonyuserIfUnauthorized
 			$ip = Ip::create($ip_args);
 		}
 		
-		$anonyuser = $ip->anonyuser;
+		$anonyuser = $ip->user;
+		$uuid = md5(time() . mt_rand(1,1000000));
 		
 		if(!$anonyuser){
 			$anonyuser_args = [
-				'anonyuser_id' => null,
-				'nickname' => $this->_randRGB(),
+				'id' => null,
+				'name' => $this->_randRGB(),
+				'is_anony' => 1,
+				'email' => $uuid,
 				'ip_id' => $ip->ip_id,
 			];
-			$anonyuser = Anonyuser::create($anonyuser_args);
+			$anonyuser = User::create($anonyuser_args);
 		}
 		//设置token
-		$uuid = md5(time() . mt_rand(1,1000000));
+		
 		$anonyuser->remember_token = $uuid;
 		$anonyuser->save();
-		setcookie('anony_remember_token', $uuid);
-		
+		setcookie('anony_remember_token', $uuid, time()+3600*24*7);
+				
 		return $anonyuser;
 	}
 	

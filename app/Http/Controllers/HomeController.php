@@ -26,9 +26,8 @@ class HomeController extends Controller
 		$user = Auth::user();
 		//如果用户未登录，找到一个匿名用户
 		if($user == null){			
-			//根据token找到该匿名用户
-			$cookie = $_COOKIE['anony_remember_token'];				
-			$user = $req->session()->get($cookie);									
+			//根据token找到该匿名用户		
+			$user = $req->session()->get('anony_user');									
 		}
 		if($model == 'tag'){
 			$tag = Tag::where('tag', $parameter)->get()->first();

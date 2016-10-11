@@ -14,6 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Requests;
 use App\Article;
 use App\Category;
+use App\Comment;
 use App\Tag;
 use App\Ip;
 
@@ -21,7 +22,7 @@ use Auth;
 
 
 class ArticleController extends Controller{
-	public function add(Request $req){
+	public function upload(Request $req){
 		$article_args = [
 			'article_id' => $req->input('article_id'),
 			'category_id' => $req->input('category_id'),
@@ -61,8 +62,28 @@ class ArticleController extends Controller{
 		return ;
 	}
 	
+	public function addComment(Request $req){
+		$comment_args = [
+			'comment_id' => $req->input('comment_id'),
+			'user_id' => $req->input('user_id'),	
+			'article_id' => $req->input('article_id'), 		
+			'lead_id' => $req->input('lead_id'),			
+			'content' => $req->input('content'),
+		];
+		$comment = Comment::create($comment_args);
+		$article = Article::find($req->input('article_id'));
+	}
+	
 	public function queryById(Request $req){		
 		$article = Article::find($req->input('article_id'));
+		$comments = $article->comments;
+		
+		$user = Auth::user();
+		//如果用户未登录，找到一个匿名用户
+		if($user == null){			
+			//根据token找到该匿名用户		
+			$user = $req->session()->get('anony_user');									
+		}
 		
 		$realip = $this->_realip();
 		$ip = Ip::where('ip', $realip)->first();
@@ -82,16 +103,20 @@ class ArticleController extends Controller{
 				$article->view ++;
 				$article->save();					
 		}
-		return view('article', ['article' => $article]);
+		return view('article', [
+			'user' => $user,
+			'comments' => $comments,
+			'article' => $article,			
+		]);
 	}
 	
-	public function hotfive(Request $req){
-		
-		return view('home', [
-			'articles' => $articles,
-			'tags' => $tags,
-		]); 
-	}
+//	public function hotfive(Request $req){
+//		
+//		return view('home', [
+//			'articles' => $articles,
+//			'tags' => $tags,
+//		]); 
+//	}
 	
 	private function _realip() {
 	    if (getenv('HTTP_CLIENT_IP')){
@@ -106,21 +131,21 @@ class ArticleController extends Controller{
 	    return $ip;
 	} 
 	
-	public function delete(Request $req){
-		Article::destroy($req->input('article_id'));
-		
-		return view('article', ['article' => $article]);
-	}
-	
-	public function alter(Request $req){
-		$article = Article::find($req->input('article_id'));
-		
-		return view('alter', ['article' => $article]);
-	}
-	
-	public function update(Request $req){
-		
-	}
+//	public function delete(Request $req){
+//		Article::destroy($req->input('article_id'));
+//		
+//		return view('article', ['article' => $article]);
+//	}
+//	
+//	public function alter(Request $req){
+//		$article = Article::find($req->input('article_id'));
+//		
+//		return view('alter', ['article' => $article]);
+//	}
+//	
+//	public function update(Request $req){
+//		
+//	}
 }
 
 ?>

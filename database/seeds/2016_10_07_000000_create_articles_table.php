@@ -14,14 +14,14 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('article_id');
-            $table->integer('category_id');
-           // $table->foreign('category_id')->references('category_id')->on('categories');
+            $table->integer('category_id');           
             $table->string('title');
             $table->string('author');     
             $table->string('outline');     
             $table->string('title_img');
             $table->text('content');  
-            $table->integer('view')->default(0);                          
+            $table->integer('view')->default(0);
+            $table->integer('like')->default(0);                          
             $table->timestamps();
         });
     }

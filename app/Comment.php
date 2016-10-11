@@ -28,12 +28,12 @@ class Comment extends Model{
         return $this->belongsTo('App\Article');
     }
     
-//    public function lead(){
-//        return $this->hasMany('App\Comment');
-//    }
-//    
-//    public function follow(){
-//        return $this->belongsTo('App\Comment');
-//    }
+    public function lead(){
+        return $this->hasMany('App\Comment');
+    }
+    
+    public function follow(){
+        return $this->belongsTo('App\Comment');
+    }
 }
 ?>

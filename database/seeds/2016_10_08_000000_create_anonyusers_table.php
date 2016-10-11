@@ -13,8 +13,8 @@ class CreateAnonyusersTable extends Migration
     public function up()
     {
         Schema::create('anonyusers', function (Blueprint $table) {
-            $table->increments('anonyuser_id');
-            $table->string('nickname');
+            $table->increments('user_id');
+            $table->string('name');
             $table->integer('ip_id');
             $table->rememberToken();                                      
             $table->timestamps();

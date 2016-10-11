@@ -18,12 +18,21 @@
 		
 		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 		<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		
+		<link rel="stylesheet" href="../home/css/myblog.css" type="text/css" />
+		
 		<script type="text/javascript">
 			function getQueryString(name){
 			     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 			     var r = window.location.search.substr(1).match(reg);
 			     if(r!=null)return  unescape(r[2]); return null;
 			}
+			//原理很简单，通过递归检查是否存在父元素，累加起来得到距离值
+function getTop(e){
+    var offset = e.offsetTop;
+    if(e.offsetParent != null) offset += getTop(e.offsetParent);
+    return offset;
+}
 			$(document).ready(function(){  
 			    $(".navbutton").each(function(){  
 			        $this = $(this);
@@ -42,95 +51,34 @@
 			    $(".hometitle").mouseleave(function(){  
 			        $this = $(this);
 			        $(".blur").css("-webkit-filter", "blur(0px)");
-			    });  			       			     
+			    });
+			    
+			    //智能浮动层
+			    //先把浮动层对象存在一个变量中，方便后面调用
+			    var obj = document.getElementById("inner"); //b为漂浮层的id
+				//获取浮动层元素离窗口顶部的距离
+				var top = getTop(obj);
+				window.onscroll = function(){
+				    //获取窗口的scrollTop
+				    var bodyScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+				
+				    if (bodyScrollTop > top){
+				    /*当窗口的滚动高度大于浮动层距离窗口顶部的距离时，也就是原理中说的第一种情况
+				    *我们把这个浮动层position值设为fixed，top值设为0px，让它定位在窗口顶部*/
+				    obj.style.position = "fixed";
+				    obj.style.top = "40px";
+				    } else {
+				    /*当窗口的滚动高度小于浮动层距离窗口顶部的距离时，也就是原理中说的第一种情况
+				    *我们把这个浮动层position值设为static或为空，让它回归文档流
+				    *让它回到原来的位置上去*/
+				    obj.style.position = "static";
+				    }
+				}
+			      			       			     
 			});
 		</script>
 		<style>
-			a{
-				color:#FFFFFF;
-			}			
-			#but_1{
-				margin-left:43%;
-			}
-			#FFFF00{
-				outline:none;
-				border:none;
-				float:left; 
-				height:66px;
-				margin-top:-8px; 
-				margin-left:15%; 
-				background-color:#115599; 
-				color:#FFFFFF
-			}
-			#FFFF00:hover{
-				background-color:#2266AA;
-			}
-			button.auth{
-				outline:none;
-				border:none;
-				float:left; 
-				height:58px;							
-				background-color:#115599; 
-				color:#FFFFFF
-			}
-			button.auth:hover{
-				background-color:#2266AA;
-				border-style: solid; border-width: 0px 0px 5px 0px; border-color: #5599DD; 
-			}
-			button.category{
-				outline:none;
-				border:none;
-				float:left; 
-				margin-left:16px; 
-				margin-top:-16px; 
-				padding:0px 7px 0px 13px; 
-				letter-spacing:6px; 
-				background-color:#115599; 
-				border-bottom-right-radius: 5px;
-				border-bottom-left-radius: 5px;
-			}
-			button.category:hover{
-				background-color:#2266AA;
-			}
-			button.more{
-				outline:none;
-				border:none;
-				margin-left:30%;
-				margin-top:5px;
-				padding:0px 7px 0px 12px;  
-				background-color:#115599;
-				color:#FFFFFF;
-				letter-spacing:5px;
-			}
-			button.more:hover{
-				background-color:#2266AA;
-			}
-			.navbutton{
-				float:left;
-				width:55px;
-				padding-left:7px;
-				outline:none;
-				height:31px;
-				border:none;
-				color:#FFFFFF;
-				background-color: #5599DD;
-			}
-			.navbutton:hover{                      
-			    background-color:#66AAEE;
-			}
-			.navbutton:focus{
-				border-style: solid; border-width: 0px 0px 5px 0px; 
-			}
-			.choice{
-				border-style: solid; border-width: 0px 0px 5px 0px;
-			}
-			.shadowbox{
-				background-color: #F5F6F7;
-	            box-shadow: 2px 3px 0.3em #DDDDDD, -1px 0px 0.5em #DDDDDD;
-			}			
-			.headimg{
-				
-			}
+
 		</style>		
 	</head>
 	<body style="background-color: #EEEEEE;">
@@ -146,15 +94,20 @@
 	    	<div style="float:left; margin-top:18px; margin-left:40px;">
 	    		<input style="padding-left:5px;width:200px; border-radius:2px;border-style:none;background-color:#2866A3"></input>	    		
 	    	</div>
+	    
+	    	<a href="#" style="float:left; margin-top:22px; margin-left:5px">
+          		<span class="glyphicon glyphicon-search"></span>
+        	</a>
+        
 	    	
-	    	@if($user->name)
+	    	@if(!$user->is_anony)
 	    		<div style="float:right; margin-top:10px; margin-right:-20px; width:40px; height:40px;  background-color:#DDDDDD; overflow:hidden;border-radius:20px">
 				  	<div style="margin-left:auto;margin-right:auto;margin-top:5px; width:16px; height:17px;  background-color:#EEEEEE; border-radius:20px">
 				 	</div>
 				 	<div style="margin-left:auto;margin-right:auto; width:20px; height:20px;  background-color:#EEEEEE; border-radius:2px">
 					</div>
 				</div>
-	    	@elseif($user->nickname)
+	    	@else
 	    		<!-- 登录注册按钮 -->
 	    		<b>
 	    		<a href="../login">
@@ -165,7 +118,7 @@
 	    		</a>
 	    		</b>
 	    		<!-- 匿名头像 -->
-	    		<div style="position:relative;float:left; margin-top:9px;margin-left:1% ; width:40px; height:40px;  background-color:{{ $user->nickname }}; overflow:hidden;border-radius:20px; z-Index:1">
+	    		<div style="position:relative;float:left; margin-top:9px;margin-left:1% ; width:40px; height:40px;  background-color:{{ $user->name }}; overflow:hidden;border-radius:20px; z-Index:1">
 				  	<div style="margin-left:auto;margin-right:auto;margin-top:5px; width:16px; height:17px;  background-color:#EEEEEE; border-radius:20px">
 				 	</div>
 				 	<div style="margin-left:auto;margin-right:auto; width:20px; height:20px;  background-color:#EEEEEE; border-radius:2px">
@@ -173,11 +126,10 @@
 				</div>    	
 	    	@endif
 	    	<!-- 用户名 -->
-	    	<div style="float:left; margin-top:18px; margin-left:-20px; padding: 2px 15px 0px 25px; background-color:#3377BB; color:#FFFFFF; border-radius:10px;">
-	    		@if($user->name)
-	    			{{ $user->name }}
-	    		@elseif($user->nickname)
-	    			{{ $user->nickname }}(未登录)    	
+	    	<div style="float:left; margin-top:17px; margin-left:-20px; padding: 3px 15px 2px 25px; background-color:#3377BB; color:#FFFFFF; border-radius:20px;">
+	    		{{ $user->name }}
+	    		@if($user->is_anony)
+	    			(未登录)    	
 	    		@endif
 	    	</div>
 	    	
@@ -353,6 +305,7 @@
 				
 		        
 		        <div class="col-md-2">
+		        	
 		        </div>
 		        
 	      	</div>
