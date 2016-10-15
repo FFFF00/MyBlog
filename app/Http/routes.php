@@ -15,13 +15,16 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::group(['prefix'=>'article'],function(){
-	Route::any('upload', 'ArticleController@upload');
-	Route::any('addComment', 'ArticleController@addComment');
-	Route::any('query', 'ArticleController@queryById')->middleware(['anony']);
-	Route::any('queryByClassify', 'HomeController@index')->middleware(['anony']);
-	Route::any('alter', 'ArticleController@alter');
-});
+
+
 Route::auth();
 
 Route::any('/index', 'HomeController@index')->middleware(['anony']);
+Route::any('/write', 'ArticleController@writeBlog');
+
+Route::group(['prefix'=>'article'],function(){
+	Route::any('/', 'ArticleController@queryById')->middleware(['anony']);
+	Route::any('upload', 'ArticleController@upload');
+	Route::any('addComment', 'ArticleController@addComment');
+	Route::any('alter', 'ArticleController@alter');
+});

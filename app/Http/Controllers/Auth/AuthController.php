@@ -51,9 +51,11 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+        	'id' => 'sometimes',
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
+            'head_img' => 'sometimes',             
         ]);
     }
 
@@ -64,11 +66,34 @@ class AuthController extends Controller
      * @return User
      */
     protected function create(array $data)
-    {
+    {	
+    	if(!array_key_exists('head_img', $data)){
+    		$data['head_img'] = '../home/image/default_head_img.png';	
+    	}
+  
+    	if(array_key_exists('id', $data)){
+    		$user = User::find($data['id']);
+    		
+	    	if($user){
+	    		if($user->is_anony){	    			
+	    			$user->name = $data['name'];
+	    			$user->email = $data['email'];
+	    			$user->is_anony = 0;
+	    			$user->password = bcrypt($data['password']);
+	    			$user->head_img = $data['head_img'];
+	    			$user->save();
+	    			return $user;
+	    		}
+	    	}	
+    	}
+    	
+    	$uuid = md5(time() . mt_rand(1,1000000));
         return User::create([
+        	'id' => $uuid,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'head_img' => $data['head_img'],
         ]);
     }
 }

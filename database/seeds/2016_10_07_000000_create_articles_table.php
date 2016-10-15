@@ -21,7 +21,8 @@ class CreateArticlesTable extends Migration
             $table->string('title_img');
             $table->text('content');  
             $table->integer('view')->default(0);
-            $table->integer('like')->default(0);                          
+            $table->integer('like')->default(0);
+            $table->softDeletes();                          
             $table->timestamps();
         });
     }

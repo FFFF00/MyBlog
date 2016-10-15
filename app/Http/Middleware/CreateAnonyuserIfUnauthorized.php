@@ -73,7 +73,7 @@ class CreateAnonyuserIfUnauthorized
 		
 		if(!$anonyuser){
 			$anonyuser_args = [
-				'id' => null,
+				'id' => $uuid,
 				'name' => $this->_randRGB(),
 				'is_anony' => 1,
 				'email' => $uuid,
@@ -85,7 +85,7 @@ class CreateAnonyuserIfUnauthorized
 		
 		$anonyuser->remember_token = $uuid;
 		$anonyuser->save();
-		setcookie('anony_remember_token', $uuid, time()+3600*24*7);
+		setcookie('anony_remember_token', $uuid, time()+3600*24*30);
 				
 		return $anonyuser;
 	}

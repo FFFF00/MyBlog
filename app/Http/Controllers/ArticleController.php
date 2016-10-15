@@ -32,6 +32,7 @@ class ArticleController extends Controller{
 			'author' => $req->input('author'),
 			'content' => $req->input('content'),
 		];
+		$article_args = $this->_uploadTitleImg($req, $article_args);
 		$article = Article::create($article_args);
 		
 		$category = $article->category;
@@ -62,6 +63,10 @@ class ArticleController extends Controller{
 		return ;
 	}
 	
+	public function writeBlog(Request $req){
+		return view('upload');
+	}
+	
 	public function addComment(Request $req){
 		$comment_args = [
 			'comment_id' => $req->input('comment_id'),
@@ -71,7 +76,7 @@ class ArticleController extends Controller{
 			'content' => $req->input('content'),
 		];
 		$comment = Comment::create($comment_args);
-		$article = Article::find($req->input('article_id'));
+		//$article = Article::find($req->input('article_id'));
 	}
 	
 	public function queryById(Request $req){		
@@ -130,6 +135,35 @@ class ArticleController extends Controller{
 	    }
 	    return $ip;
 	} 
+	
+	private function _uploadTitleImg(Request $req, $args){
+		//if banner_img exit
+		if($req->hasFile('title_img')){
+			$file = $req->file('title_img');
+			//get the postfix of file			
+			$filename = $file->getClientOriginalName();
+			$filename_arr = explode(".",$filename);
+			$postfix = '.'.end($filename_arr);
+			//baseurl for visiting sources, basepath for storing sources						
+		
+			if($file->isValid()){
+				$uniqid = uniqid();
+				$img_path ='../public/home/img/title_img/'.$uniqid;
+				if(is_dir($img_path)){
+					return $args;
+				}
+				mkdir($img_path);
+				$file->move($img_path, md5($args['title']).$postfix);
+				$args['title_img'] = '../home/img/title_img/'.$uniqid.'/'.md5($args['title']).$postfix;
+				
+				return $args;
+			}
+		}
+		
+		$args['title_img'] = '../home/img/title_img/default_title_img.png';
+		return $args;
+			
+	}
 	
 //	public function delete(Request $req){
 //		Article::destroy($req->input('article_id'));
