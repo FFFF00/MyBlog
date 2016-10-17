@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('ip_id');
             $table->string('head_img');
-            $table->integer('is_anony');->default(0);
+            $table->integer('is_anony')->default(0);
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
