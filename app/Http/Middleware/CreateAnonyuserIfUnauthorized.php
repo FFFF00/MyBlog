@@ -54,7 +54,7 @@ class CreateAnonyuserIfUnauthorized
 	    return $ip;
 	} 
 	
-	private function _anonyuserByIp(Request $request){
+	private function _anonyuserByIp(Request $req){
 		$realip = $this->_realip();
 		$ip = Ip::where('ip', $realip)->first();
 		
