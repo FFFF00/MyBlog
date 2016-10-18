@@ -39,6 +39,11 @@ class ArticleController extends Controller{
 		$category->count ++;
 		$category->save();
 		
+		$this->_createTag($article, $req);
+		return ;
+	}
+	
+	private function _createTag($article, Request $req){
 		$tag_str = explode(';', $req->input('tags'));
 		$tag_str = array_filter($tag_str);
 		
@@ -60,7 +65,6 @@ class ArticleController extends Controller{
 				$article->tags()->attach($tag->tag_id);					
 			}						
 		}
-		return ;
 	}
 	
 	public function writeBlog(Request $req){

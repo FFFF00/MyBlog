@@ -11,11 +11,16 @@
     	标题：<input id="title" type="text"></input><br>
     	题图：<input id="title_img" type="file"></input><br>
     	标签：<input id="tags" type="text"></input><br>
+    	分类：<input name="category_id" type="radio" value="1">技术</input>
+    		<input name="category_id" type="radio" value="2">游戏</input>
+    		<input name="category_id" type="radio" value="3">随笔</input>
+    		<input name="category_id" type="radio" value="4">转载</input>
+    	<br>
     	主题：<input id="outline" type="text" style="width:400px;height:60px"></input><br>
     	正文：
         <!-- 加载编辑器的容器 -->
         <script id="container" name="content" type="text/plain">
-这里写你的初始化内容
+复制在这里然后提交
         </script>
     </form>
     <button id="submit">submit</button>
@@ -31,17 +36,19 @@
         	var content = UE.getEditor('container').getContent();
         	var title = $("#title").val();
         	var tags = $("#tags").val();
+        	var category_id = $('input:radio:checked').val();
         	var title_img = $("#title_img").val();
  			var outline = $("#outline").val();
  			
         	$.ajax({
             cache: true,
             type: "POST",
-            url: "http://192.168.10.10/article/upload",
+            url: "../article/upload",
 	　　　　　　data: {
 				"title": title,				
 				"author": "FFFF00",
 				"tags": tags, 
+				"category_id": category_id,
 				"outline": outline,
 				"title_img": title_img,
 	　　　　　　　　　	"content": content,

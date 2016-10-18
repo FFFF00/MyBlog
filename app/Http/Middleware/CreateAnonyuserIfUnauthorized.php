@@ -73,7 +73,7 @@ class CreateAnonyuserIfUnauthorized
 		
 		if(!$anonyuser){
 			$anonyuser_args = [
-				'id' => $uuid,
+				'id' => mt_rand(1,100000000),
 				'name' => $this->_randRGB(),
 				'is_anony' => 1,
 				'email' => $uuid,
