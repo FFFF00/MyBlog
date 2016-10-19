@@ -22,7 +22,7 @@ class HomeController extends Controller
 		$model = $req->input('model');
 		$parameter = $req->input('parameter');
 		$hotfive = Article::orderBy('view', 'desc')->take(5)->get();
-		$tags = Tag::All();
+		$tags = Tag::All()->take(10);
 		$user = Auth::user();
 		//如果用户未登录，找到一个匿名用户
 		if($user == null){			

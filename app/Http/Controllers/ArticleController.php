@@ -28,10 +28,11 @@ class ArticleController extends Controller{
 			'category_id' => $req->input('category_id'),
 			'title' => $req->input('title'),
 			'outline' => $req->input('outline'),
-			'title_img' => $req->input('title_img'),
+			//'title_img' => $req->input('title_img'),
 			'author' => $req->input('author'),
 			'content' => $req->input('content'),
 		];
+
 		$article_args = $this->_uploadTitleImg($req, $article_args);
 		$article = Article::create($article_args);
 		
@@ -40,7 +41,7 @@ class ArticleController extends Controller{
 		$category->save();
 		
 		$this->_createTag($article, $req);
-		return ;
+		return "success";
 	}
 	
 	private function _createTag($article, Request $req){
@@ -142,6 +143,7 @@ class ArticleController extends Controller{
 	
 	private function _uploadTitleImg(Request $req, $args){
 		//if banner_img exit
+
 		if($req->hasFile('title_img')){
 			$file = $req->file('title_img');
 			//get the postfix of file			
@@ -149,7 +151,7 @@ class ArticleController extends Controller{
 			$filename_arr = explode(".",$filename);
 			$postfix = '.'.end($filename_arr);
 			//baseurl for visiting sources, basepath for storing sources						
-		
+
 			if($file->isValid()){
 				$uniqid = uniqid();
 				$img_path ='../public/home/img/title_img/'.$uniqid;

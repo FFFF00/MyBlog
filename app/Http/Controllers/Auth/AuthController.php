@@ -68,7 +68,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {	
     	if(!array_key_exists('head_img', $data)){
-    		$data['head_img'] = '../home/image/default_head_img.png';	
+    		$data['head_img'] = '../home/img/head_img/default_head_img.png';	
     	}
   
     	if(array_key_exists('anony_remember_token', $_COOKIE)){

@@ -42,7 +42,11 @@
 					$(this).css({"width":w,"height":height});//设置缩放后的宽度和高度 
 					} 
 				});
-			}		      
+			}
+					      
+			$(window).load(function(){
+				adjustimg();
+			})
 			
 			$(document).ready(function(){
 				adjustimg();
@@ -230,17 +234,17 @@
 		        <div class="" style="float:left;margin-left:210px;width:567px;">
 		        	
 		        	<div class="row">
-			        	<div id="content" class="shadowbox" style="padding:0px 24px 0px 24px">					    	
+			        	<div id="content" class="shadowbox" style="padding:0px 24px 4px 24px">					    	
 					        <br>					        
 					        <p>{{ $article->outline }}</p><br>  
 					        <p>{!! $article->content !!}</p>      					        					       					        
 						</div>
 					</div>  
 					<!-- 评论区标题 -->
-					<div class="row" style="height:90px;margin-top:10px;background-color:#5599DD;color:#FFFFFF">
+					<div class="row" style="height:90px;margin-top:20px;background-color:#5599DD;color:#FFFFFF">
 						<img src="../home/img/logo/comment.png" style="margin-left:25px"></img>					
 						<img src="../home/img/logo/slash.png" style="margin-left:230px"></img>
-						<div style="margin:50px 15px 5px 0px; float:right;"><h6>已有评论20条</h6></div> 
+						<div style="margin:50px 15px 5px 0px; float:right;"><h6>已有评论0条</h6></div> 
 					</div>
 					
 					<!-- 评论区 -->
@@ -326,7 +330,7 @@
 					        		
 									@foreach ($article->tags as $tag)
 									<div style="margin-left:5px;margin-top:5px;padding:4px;background-color: #115599; float:left; color:#FFFFFF">
-										<b><a style="color:#FFFFFF" href=http://192.168.10.10/article/queryByClassify?model=tag&parameter={{ $tag->tag }}>{{ $tag->tag }}({{ $tag->count }})</a></b>
+										<b><a style="color:#FFFFFF" href=./index?model=tag&parameter={{ $tag->tag }}>{{ $tag->tag }}({{ $tag->count }})</a></b>
 									</div>
 									@endforeach	
 								</div>
