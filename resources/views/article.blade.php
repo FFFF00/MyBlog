@@ -251,7 +251,7 @@
 					<div class="row shadowbox" style="margin-top:20px; margin-bottom:20px; padding:0px 0% 0px 0%;  ">					
 					
 					@if($user->is_anony)
-		    		<div style="float:left; margin-top:30px;margin-left:25px ; width:35px; height:35px;  background-color:{{ $comment->user->name }}; overflow:hidden;border-radius:20px; z-Index:1">
+		    		<div style="float:left; margin-top:30px;margin-left:25px ; width:35px; height:35px;  background-color:{{ $user->name }}; overflow:hidden;border-radius:20px; z-Index:1">
 					  	<div style="margin-left:auto;margin-right:auto;margin-top:5px; width:15px; height:15px;  background-color:#EEEEEE; border-radius:20px">
 					 	</div>
 					 	<div style="margin-left:auto;margin-right:auto; width:17px; height:20px;  background-color:#EEEEEE; border-radius:2px">
